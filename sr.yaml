@@ -1,0 +1,30 @@
+reviewer: mailto:user@example.com
+
+labels:
+  category:
+    question: Category
+    type: categorical
+    categories:
+      - A
+      - B
+      - C
+
+  include:
+    question: Include?
+    required: true
+    type: boolean
+
+flows:
+  pubmed-search:
+    steps:
+      - uses: github:insilica/srvc-pubmed-search
+        query: angry bees
+
+  label:
+    steps:
+      - run-embedded: generator sink.jsonl
+
+      - run-embedded: remove-reviewed
+
+      - run-embedded: label-web
+        labels: [include, category]
